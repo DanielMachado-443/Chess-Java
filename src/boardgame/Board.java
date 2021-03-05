@@ -31,4 +31,9 @@ public class Board {
 	public Piece piece(Position posistion) {
 		return pieces[posistion.getRow()][posistion.getColumn()];
 	}
+	
+	public void placePiece(Piece piece, Position position) {
+		pieces[position.getRow()][position.getColumn()] = piece;
+		piece.position = position; // Changing the piece position from null to the new one that has been passed as this method argument
+	}
 }
