@@ -50,7 +50,7 @@ public class UI {
 
 	public static void printBoard(ChessPiece[][] pieces) {
 		
-		System.out.println("\n");
+		System.out.println();
 		
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print("   " + (8 - i) + " "); // << Appends of first line || Always BEFORE the little for entry
