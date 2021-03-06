@@ -34,46 +34,61 @@ public class UI {
 		System.out.println("\033[H\033[2J");
 		System.out.flush();
 	}
-	
-	public static ChessPosition readChessPosition(Scanner sc) { // << converting a user input to the ChessPosition format
+
+	public static ChessPosition readChessPosition(Scanner sc) { // << converting a user input to the ChessPosition
+																// format
 		try {
 			String s = sc.nextLine();
 			char column = s.charAt(0);
 			int row = Integer.parseInt(s.substring(1));
 			return new ChessPosition(column, row);
-		}
-		catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw new InputMismatchException("Error reading ChessPosition. Valid values are from a1 to h8.");
 		}
-		
+
 	}
 
 	public static void printBoard(ChessPiece[][] pieces) {
-		
+
 		System.out.println();
-		
+
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print("   " + (8 - i) + " "); // << Appends of first line || Always BEFORE the little for entry
 			for (int j = 0; j < pieces.length; j++) { // << pieces.lenght aswell because this is a quadratic matrix
-				printPiece(pieces[i][j]);
+				printPiece(pieces[i][j], false); // << Nice strategy!!! 
 			}
 			System.out.println();
 		}
 		System.out.println("     A B C D E F G H");
 	}
 
-	private static void printPiece(ChessPiece piece) {
-    	if (piece == null) {
-            System.out.print("-");
-        }
-        else {
-            if (piece.getColor() == Color.WHITE) {
-                System.out.print(ANSI_WHITE + piece + ANSI_RESET);
-            }
-            else {
-                System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
-            }
-        }
-        System.out.print(" ");
+	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
+
+		System.out.println();
+
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print("   " + (8 - i) + " "); // << Appends of first line || Always BEFORE the little for entry
+			for (int j = 0; j < pieces.length; j++) { // << pieces.lenght aswell because this is a quadratic matrix
+				printPiece(pieces[i][j], possibleMoves[i][j]); // << In this case just the two fors are enough
+			}
+			System.out.println();
+		}
+		System.out.println("     A B C D E F G H");
+	}
+
+	private static void printPiece(ChessPiece piece, boolean background) {
+		if(background) {
+			System.out.print(ANSI_BLUE_BACKGROUND);
+		}
+		if (piece == null) {
+			System.out.print("-" + ANSI_RESET);
+		} else {
+			if (piece.getColor() == Color.WHITE) {
+				System.out.print(ANSI_WHITE + piece + ANSI_RESET);
+			} else {
+				System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
+			}
+		}
+		System.out.print(" ");
 	}
 }
