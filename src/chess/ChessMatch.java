@@ -25,14 +25,6 @@ public class ChessMatch {
 		return mat;
 	}
 	
-	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
-		Position source = sourcePosition.toPosition();
-		Position target = targetPosition.toPosition();
-		validateSourcePosition(source);
-		Piece capturedPiece = makeMove(source, target);
-		return (ChessPiece)capturedPiece; // << Downcasting from Piece to its subclass object ChessPiece
-	}
-	
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source); // Picked up the source piece
 		Piece capturedPiece = board.removePiece(target);
@@ -40,9 +32,20 @@ public class ChessMatch {
 		return capturedPiece;
 	}
 	
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+		Position source = sourcePosition.toPosition();
+		Position target = targetPosition.toPosition();
+		validateSourcePosition(source);
+		Piece capturedPiece = makeMove(source, target);
+		return (ChessPiece)capturedPiece; // << Downcasting from Piece to its subclass object ChessPiece
+	}		
+	
 	private void validateSourcePosition(Position position) { // << Nice defensive programming
 		if(!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
+		}
+		if(!board.piece(position).isThereAnyPossibleMove()) {
+			throw new ChessException("There is no possible moves for the chosen piece");
 		}
 	}
 	
