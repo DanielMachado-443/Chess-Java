@@ -44,6 +44,19 @@ public class Board {
 		piece.position = position; // Changing the piece position from null to the new one that has been passed as this method argument
 	}
 	
+	public Piece removePiece(Position position) { // << NICE STRATEGY!!!
+		if(!positionExists(position)) {
+			throw new BoardException("Position not on the board");
+		}
+		if(piece(position) == null) {
+			return null;
+		}
+		Piece aux = piece(position); // Why not just change the piece's position straightly? 
+		aux.position = null; // reseting the piece position to null (once piece is an object it will be affected by the aux object)
+		pieces[position.getRow()][position.getColumn()] = null; // REMOVING the PIECE from the BOARD
+		return aux;
+	}
+	
 	private boolean positionExists(int row, int column) {
 		return row >= 0 && row < rows && column >= 0 && column < columns;
 	}
