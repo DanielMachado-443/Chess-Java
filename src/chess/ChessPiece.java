@@ -9,7 +9,7 @@ public abstract class ChessPiece extends Piece{	// << second level of inheritanc
 	private Color color;
 
 	public ChessPiece(Board board, Color color) {
-		super(board);
+		super(board); // << I shall understand it better
 		this.color = color;
 	}	
 
@@ -17,7 +17,11 @@ public abstract class ChessPiece extends Piece{	// << second level of inheritanc
 		return color;
 	}		
 	
-	protected boolean isThereOpponentPiece(Position position) {
+	public ChessPosition getChessPosition(){
+		return ChessPosition.fromPosition(position);
+	}
+	
+	protected boolean isThereOpponentPiece(Position position) { // << Why is this method here instead of ChessMatch?
 		ChessPiece p = (ChessPiece)getBoard().piece(position); // << It makes a downcasting
 		return p != null && p.getColor() != color; // << Checks if this is an enemy piece
 	}
