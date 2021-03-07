@@ -50,8 +50,7 @@ public class ChessMatch {
 		return mat;
 	}
 
-	public boolean[][] possibleMoves(ChessPosition sourcePosition) { // why is it necessary to import the Position as
-																		// ChessPosition
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) { // why is it necessary to import the Position as ChessPosition																		
 		Position position = sourcePosition.toPosition();
 		validateSourcePosition(position);
 		return board.piece(position).possibleMoves();
@@ -88,8 +87,7 @@ public class ChessMatch {
 		return capturedPiece; // << It returns this capturedPiece to the performChessMove method
 	}
 
-	private void undoMove(Position source, Position target, Piece capturedPiece) { // << The trick is in the Piece
-																					// capturedPiece argument
+	private void undoMove(Position source, Position target, Piece capturedPiece) { // << The trick is in the Piece capturedPiece argument																					
 		Piece p = board.removePiece(target);
 		board.placePiece(p, source);
 
@@ -128,39 +126,36 @@ public class ChessMatch {
 	}
 
 	private ChessPiece pickTheChessPieceKing(Color color) {
-		List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor() == color)
+		List<Piece> list = piecesOnTheBoard.stream()
+				.filter(x -> ((ChessPiece) x)
+				.getColor() == color)
 				.collect(Collectors.toList());
-		// The strategy above fills the >>list<< up with ONLY ONE SPECIFIC COLOR of ALL
-		// ON the board PIECES
+		// The strategy above fills the >>list<< up with ONLY ONE SPECIFIC COLOR of ALL ON the board PIECES		
 
 		for (Piece p : list) { // << Like C# foreach? (Yes, I've learned C# first)
-			if (p instanceof King) { // Picking up the King in the collection of all of THIS color pieces ON the
-										// BOARD
+			if (p instanceof King) { // Picking up the King in the collection of all of THIS color pieces ON the BOARD										
 				return (ChessPiece) p; // << Basic downcasting
 			}
 		}
-		throw new IllegalStateException("There is no " + color + " king on the board"); // << Critical chess system
-																						// problem!!!
+		throw new IllegalStateException("There is no " + color + " king on the board"); // << Critical chess system problem!!!																						
 	}
-
-	// CHECK LOGIC BELLOW!!! // CHECK LOGIC BELLOW!!! // CHECK LOGIC BELLOW!!! //
-	// CHECK LOGIC BELLOW!!! // CHECK LOGIC BELLOW!!!
+	
+	// CHECK LOGIC BELLOW!!! // CHECK LOGIC BELLOW!!! // CHECK LOGIC BELLOW!!!
 	private boolean testCheck(Color color) { // << WONDERFUL METHOD!!!
-		Position kingPosition = pickTheChessPieceKing(color).getChessPosition().toPosition(); // << Nice strategy
-		List<Piece> opponentPieces = piecesOnTheBoard.stream()
-				.filter(x -> ((ChessPiece) x).getColor() == opponent(color)) // << There is a magic that happens here
+		Position kingPosition = pickTheChessPieceKing(color).getChessPosition().toPosition(); // << getChessPosition is a ChessPiece method
+		List<Piece> opponentPieces = piecesOnTheBoard.stream()								  // << toPosition transforms ChessPosition to Position again
+				.filter(x -> ((ChessPiece) x)
+			    .getColor() == opponent(color)) // << There is a magic that happens here
 				.collect(Collectors.toList());
 
-		for (Piece p : opponentPieces) {
+		for (Piece p : opponentPieces) {  // << Like C# foreach? (Yes, I've learned C# first)
 			boolean[][] mat = p.possibleMoves(); // << Aux boolean matrix
-			if (mat[kingPosition.getRow()][kingPosition.getColumn()]) {
-				return true; // IT CUTS THE METHOD AT THE FIRST TRUE TEST IN ALL ENEMY PIECES possibleMoves
+			if (mat[kingPosition.getRow()][kingPosition.getColumn()]) { // << Checks IF the kingPosition is a possible move of at least ONE ENEMY piece
+				return true; // IT CUTS THE METHOD AT THE FIRST TRUE, TEST IN ALL ENEMY PIECES possibleMoves
 			}
 		}
-		return false;
-	}
-	// CHECK LOGIC ABOVE!!! // CHECK LOGIC ABOVE!!! // CHECK LOGIC ABOVE!!! // CHECK
-	// LOGIC ABOVE!!! // CHECK LOGIC ABOVE!!!
+		return false;	}
+	// CHECK LOGIC ABOVE!!! // CHECK LOGIC ABOVE!!! // CHECK LOGIC ABOVE!!!	
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());

@@ -18,7 +18,8 @@ public abstract class ChessPiece extends Piece{	// << second level of inheritanc
 	}		
 	
 	public ChessPosition getChessPosition(){
-		return ChessPosition.fromPosition(position);
+		return ChessPosition.fromPosition(position); // << position here is the inherited Piece's position attribute
+													// << fromPosition returns a ChessPosition
 	}
 	
 	protected boolean isThereOpponentPiece(Position position) { // << Why is this method here instead of ChessMatch?

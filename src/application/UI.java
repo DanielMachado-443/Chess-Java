@@ -65,10 +65,7 @@ public class UI {
 		}
 	}
 
-	public static void printBoard(ChessPiece[][] pieces) {
-
-		System.out.println();
-
+	public static void printBoard(ChessPiece[][] pieces) {		
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print("   " + (8 - i) + " "); // << Appends of first line || Always BEFORE the little for entry
 			for (int j = 0; j < pieces.length; j++) { // << pieces.lenght aswell because this is a quadratic matrix
@@ -79,10 +76,7 @@ public class UI {
 		System.out.println("     A B C D E F G H");
 	}
 
-	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
-
-		System.out.println();
-
+	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {		
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print("   " + (8 - i) + " "); // << Appends of first line || Always BEFORE the little for entry
 			for (int j = 0; j < pieces.length; j++) { // << pieces.lenght aswell because this is a quadratic matrix
