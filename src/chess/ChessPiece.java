@@ -7,6 +7,7 @@ import boardgame.Position;
 public abstract class ChessPiece extends Piece{	// << second level of inheritance && TWO SUBSEQUENT ABASTRACT CLASS
 	
 	private Color color;
+	private int moveCount;
 
 	public ChessPiece(Board board, Color color) {
 		super(board); // << I shall understand it better
@@ -16,6 +17,18 @@ public abstract class ChessPiece extends Piece{	// << second level of inheritanc
 	public Color getColor() {
 		return color;
 	}		
+	
+	public int getMoveCount() {
+		return moveCount;
+	}
+	
+	public void increaseMoveCount() {
+		moveCount++;
+	}
+	
+	public void decreaseMoveCount() {
+		moveCount--;
+	}
 	
 	public ChessPosition getChessPosition(){
 		return ChessPosition.fromPosition(position); // << position here is the inherited Piece's position attribute
