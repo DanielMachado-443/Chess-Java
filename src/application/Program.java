@@ -18,7 +18,7 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>(); // << Mean to instance a list
 		
-		while(true) {
+		while(!chessMatch.getCheckMate()) { // << Tests if there is a checkMate
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch, captured);				
@@ -48,6 +48,9 @@ public class Program {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 			}	
-		}		
+		}
+		
+		UI.clearScreen();
+		UI.printMatch(chessMatch, captured); // Prints the match again after the game is ended
 	}
 }
