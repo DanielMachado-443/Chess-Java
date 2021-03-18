@@ -2,13 +2,17 @@ package chess.pieces;
 
 import boardgame.Board;
 import boardgame.Position;
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
 
 public class King extends ChessPiece { // << third level of inheritance
 
-	public King(Board board, Color color) {
+	private ChessMatch chessMatch;
+
+	public King(Board board, Color color, ChessMatch chessMatch) {
 		super(board, color);
+		this.chessMatch = chessMatch;
 	}
 
 	@Override
@@ -21,11 +25,16 @@ public class King extends ChessPiece { // << third level of inheritance
 		return p == null || p.getColor() != getColor(); // << Interesting
 	}
 
+	private boolean testRookCastling(Position position) {
+		ChessPiece p = (ChessPiece) getBoard().piece(position); // << Picked this piece up
+		return p != null && p instanceof Rook && p.getColor() == getColor() // << Same actual player color
+				&& p.getMoveCount() == 0; // << Didnt move yet
+	}
+
 	@Override
 	public boolean[][] possibleMoves() {
 		boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getColumns()]; // << Picking up the rows and
 																						// columns from the Board object
-
 		Position p = new Position(0, 0);
 
 		// ABOVE
@@ -74,6 +83,36 @@ public class King extends ChessPiece { // << third level of inheritance
 		p.setValues(position.getRow() + 1, position.getColumn() + 1);
 		if (getBoard().positionExists(p) && canMove(p)) {
 			mat[p.getRow()][p.getColumn()] = true;
+		}
+
+		// #specialMove CASTLING
+		if (getMoveCount() == 0 && !chessMatch.getCheck()) {
+			// #specialMove castling kingside rook
+			Position posT1 = new Position(position.getRow(), position.getColumn() + 3); // << Actual THIS king position
+																						// + 3
+			if (testRookCastling(posT1)) {
+				Position p1 = new Position(position.getRow(), position.getColumn() + 1);
+				Position p2 = new Position(position.getRow(), position.getColumn() + 2);
+				if (getBoard().piece(p1) == null && getBoard().piece(p2) == null) { // << Remember: THIS king class has
+																					// a ChessMatch dependency
+					mat[position.getRow()][position.getColumn() + 2] = true; // << Small rock is two squares right
+				}
+			}
+		}
+
+		if (getMoveCount() == 0 && !chessMatch.getCheck()) {
+			// #specialMove castling King side rook
+			Position posT2 = new Position(position.getRow(), position.getColumn() - 4); // << Actual THIS king position
+																						// + 3
+			if (testRookCastling(posT2)) {
+				Position p1 = new Position(position.getRow(), position.getColumn() - 1);
+				Position p2 = new Position(position.getRow(), position.getColumn() - 2);
+				Position p3 = new Position(position.getRow(), position.getColumn() - 3);
+				if (getBoard().piece(p1) == null && getBoard().piece(p2) == null && getBoard().piece(p3) == null) { // << Remember: THIS king class has
+																					// a ChessMatch dependency
+					mat[position.getRow()][position.getColumn() - 2] = true; // << Small rock is two squares right
+				}
+			}
 		}
 
 		return mat;
