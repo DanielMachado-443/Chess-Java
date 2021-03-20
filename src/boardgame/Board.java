@@ -51,10 +51,10 @@ public class Board {
 		if(piece(position) == null) {
 			return null;
 		}
-		Piece aux = piece(position); // Why not just change the piece's position straightly? 
+		Piece aux = piece(position); //<< This 'piece' is a METHOD!!! ... Why not just change the piece's position straightly? 
 		aux.position = null; // reseting the piece position to null (once piece is an object it will be affected by the aux object)
 		pieces[position.getRow()][position.getColumn()] = null; // REMOVING the PIECE from the BOARD
-		return aux;
+		return aux; // << 'aux' is a Piece
 	}
 	
 	private boolean positionExists(int row, int column) {

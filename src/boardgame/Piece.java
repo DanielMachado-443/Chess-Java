@@ -10,7 +10,7 @@ public abstract class Piece {
 		position = null; // << it was already be initialized with null value
 	}
 
-	protected Board getBoard() {
+	protected Board getBoard() { //<< Interesting!!!
 		return board;
 	}
 
