@@ -36,8 +36,15 @@ public class Program {
 				ChessPosition target = UI.readChessPosition(sc); // << In the place of Console.ReadLine();
 				
 				ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
+				
 				if(capturedPiece != null) { // << Whenever I've made a move and the piece is not null, it will be added in the captured pieces list
 					captured.add(capturedPiece);
+				}
+				
+				if(chessMatch.getPromoted() != null) {
+					System.out.print("Enter piece for promotion (B/H/R/Q): "); // << Change 'R' of (Rook) to 'T' from 'Tower'
+					String type = sc.nextLine();
+					chessMatch.replacePromotedPiece(type);
 				}
 			}
 			catch(ChessException e){

@@ -1,5 +1,6 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,9 @@ public class ChessMatch {
 	private Board board;
 	private boolean check;
 	private boolean checkMate;
-	private ChessPiece enPassantVulnerable; // << It wont be initiated in the constructor, because it already is null by
-											// default
+	private ChessPiece enPassantVulnerable; // << It wont be initiated in the constructor, because it already is null by default
+	private ChessPiece promoted;
+											
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>(); // << This could be inside of the constructor aswell
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -64,6 +66,10 @@ public class ChessMatch {
 	public ChessPiece getEnPassantVulnerable() {
 		return enPassantVulnerable;
 	}
+	
+	public ChessPiece getPromoted() {
+		return promoted;
+	}
 
 	public boolean[][] possibleMoves(ChessPosition sourcePosition) { // why is it necessary to import the Position as
 																		// ChessPosition
@@ -84,12 +90,23 @@ public class ChessMatch {
 			throw new ChessException("You can't put yourself in a check position");
 		}
 
-		ChessPiece movedPiece = (ChessPiece) board.piece(target); // << 'target' is the player moved piece, so we're
+		ChessPiece movedPiece = (ChessPiece)board.piece(target); // << 'target' is the player moved piece, so we're
 																	// getting the moved piece
-
+		
+		// #specialmove promotion
+		promoted = null;
+		if(movedPiece instanceof Pawn) {
+			if(movedPiece.getColor() == Color.WHITE && target.getRow() == 0
+					|| movedPiece.getColor() == Color.BLACK && target.getRow() == 7) {
+				
+				promoted = (ChessPiece)board.piece(target);
+				promoted = replacePromotedPiece("Q");
+			}
+		}
+		
+		
 		check = (testCheck(opponent(currentPlayer))) ? true : false; // << Nice strategy ... Conditional ternary
 																		// expression
-
 		if (testCheckMate(opponent(currentPlayer))) { // << It tests if the opponent king is in CheckMate
 			checkMate = true;
 		} else {
@@ -105,6 +122,37 @@ public class ChessMatch {
 		}
 
 		return (ChessPiece) capturedPiece; // << Downcasting from Piece to its subclass object ChessPiece
+	}
+	
+	public ChessPiece replacePromotedPiece(String type) {
+		if(promoted == null) {
+			throw new IllegalStateException();
+		}
+		if(!type.equals("B") && !type.equals("H") && !type.equals("R") && !type.equals("Q")
+				&& !type.equals("b") && !type.equals("h") && !type.equals("r") && !type.equals("q")) { // We use .equals because String isnt a primitive type
+			throw new InvalidParameterException("Invalid type for promotion");
+		}
+		
+		Position pos = promoted.getChessPosition().toPosition();
+		Piece p = board.removePiece(pos);
+		piecesOnTheBoard.remove(p);
+		
+		ChessPiece newPiece = newPiece(type, promoted.getColor());
+		board.placePiece(newPiece, pos);
+		piecesOnTheBoard.add(newPiece);
+		
+		return newPiece;
+	}
+	
+	private ChessPiece newPiece(String type, Color color) {
+		if(type.equals("b")) return new Bishop(board, color);
+		if(type.equals("h")) return new Knight(board, color);
+		if(type.equals("q")) return new Queen(board, color);
+		
+		if(type.equals("B")) return new Bishop(board, color);
+		if(type.equals("H")) return new Knight(board, color);
+		if(type.equals("Q")) return new Queen(board, color);
+		return new Rook(board, color);
 	}
 
 	private Piece makeMove(Position source, Position target) {
