@@ -1,6 +1,5 @@
 package chess;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -128,9 +127,8 @@ public class ChessMatch {
 		if(promoted == null) {
 			throw new IllegalStateException();
 		}
-		if(!type.equals("B") && !type.equals("H") && !type.equals("R") && !type.equals("Q")
-				&& !type.equals("b") && !type.equals("h") && !type.equals("r") && !type.equals("q")) { // We use .equals because String isnt a primitive type
-			throw new InvalidParameterException("Invalid type for promotion");
+		if(!type.equals("B") && !type.equals("H") && !type.equals("R") && !type.equals("Q")) { // We use .equals because String isnt a primitive type
+			return promoted; //<< Keeps the Queen in the position without changing it
 		}
 		
 		Position pos = promoted.getChessPosition().toPosition();
@@ -144,11 +142,7 @@ public class ChessMatch {
 		return newPiece;
 	}
 	
-	private ChessPiece newPiece(String type, Color color) {
-		if(type.equals("b")) return new Bishop(board, color);
-		if(type.equals("h")) return new Knight(board, color);
-		if(type.equals("q")) return new Queen(board, color);
-		
+	private ChessPiece newPiece(String type, Color color) {			
 		if(type.equals("B")) return new Bishop(board, color);
 		if(type.equals("H")) return new Knight(board, color);
 		if(type.equals("Q")) return new Queen(board, color);
