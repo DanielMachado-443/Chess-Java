@@ -50,7 +50,7 @@
 
 - Lastly, on the application folder, we got two classes, one of them being the code's entry point (class Program) and the other 'UI', which is responsible for the view layer spot.
 
-In the red rectangle we got the chess's pieces printer method, in which the memory data of pieces and positions are converted to chars that represent them on the console screen. In the yellow rectangle we got the same process, but now this printer method will make visible the 'possibleMoves'. In the purple rectangle we have the method that paints the pieces according to it's TEAM (white or yellow)
+- In the red rectangle we got the chess's pieces printer method, in which the memory data of pieces and positions are converted to chars that represent them on the console screen. In the yellow rectangle we got the same process, but now this printer method will make visible the 'possibleMoves'. In the purple rectangle we have the method that paints the pieces according to it's TEAM (white or yellow)
 
 <a title="Console Chess Java">
   <img src="https://i.imgur.com/XgvipD4.png"/>
